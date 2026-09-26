@@ -10,13 +10,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -40,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.equipo2.xiaomios.GlobalVariables
 import edu.equipo2.xiaomios.MENUS
+import edu.equipo2.xiaomios.MenuHandler
 import edu.equipo2.xiaomios.R
 
 import edu.equipo2.xiaomios.ui.theme.AccentColor
@@ -66,7 +71,9 @@ val Botones = listOf<BotonNavegacion>(
 @Composable
 fun BarraNavegacion(){
     Column(
-        verticalArrangement = Arrangement.Bottom
+        verticalArrangement = Arrangement.Bottom,
+        // Padding para mover los botones de la barra de navegación en caso de que la navegación por botones de Android está activada
+        modifier = Modifier.navigationBarsPadding()
     ){
         Row(
             modifier = Modifier
@@ -89,7 +96,7 @@ fun RowScope.CrearBotonNavegacion(Boton: BotonNavegacion){
             .fillMaxHeight()
         ,
         onClick = {
-            GlobalVariables.menuActual = Boton.Menu
+            MenuHandler.cambiarMenu(Boton.Menu)
                   },
         shape = RectangleShape,
         colors = ButtonDefaults.buttonColors(
@@ -97,7 +104,7 @@ fun RowScope.CrearBotonNavegacion(Boton: BotonNavegacion){
         ),
         contentPadding = PaddingValues(0.dp)
     ){
-        val isActive = Boton.Menu == GlobalVariables.menuActual
+        val isActive = Boton.Menu == MenuHandler.menuActual
         val mainColor = if (isActive) AccentColor else SecondaryTextColor
         Column(
             horizontalAlignment = Alignment.CenterHorizontally

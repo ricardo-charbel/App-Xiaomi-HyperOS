@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.WindowInsetsRulers.Companion.SafeContent
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -48,13 +49,7 @@ import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.BackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
 
-enum class MENUS{
-    INTEGRANTES,
-    PORTAFOLIO,
-    INVESTIGACION,
-    ACTIVIDAD
-}
-
+// Función inicial del programa y la primera en ser llamada para su ejecución
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +62,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+// Para testing. Esto permite visualizar la aplicación dentro de Android Studio en la resolución de un celular.
 @Preview (
     showBackground = true,
     device = Devices.PHONE,
     showSystemUi = true
 )
-@Composable
+@Composable // Contenedor principal de la aplicación
 fun MainContainer() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -94,7 +89,7 @@ fun MainContainer() {
                     bottom = (bottomPadding - 20.dp).coerceAtLeast(0.dp)
                 )
         ) {
-            when (GlobalVariables.menuActual) {
+            when (MenuHandler.menuActual) {
                 MENUS.INTEGRANTES -> MenuIntegrantes()
                 MENUS.PORTAFOLIO -> MenuPortafolio()
                 MENUS.ACTIVIDAD -> MenuActividad(GlobalVariables.actividadCargada)
@@ -104,9 +99,8 @@ fun MainContainer() {
         }
     }
 
-    BackHandler(enabled = (GlobalVariables.actividadCargada != null)) {
-        GlobalVariables.actividadCargada = null
-        GlobalVariables.menuActual = MENUS.PORTAFOLIO
+    BackHandler(enabled = MenuHandler.submenu) {
+        MenuHandler.cambiarMenu(MenuHandler.menuAnterior)
     }
 }
 

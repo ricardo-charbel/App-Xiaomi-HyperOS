@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -41,8 +42,10 @@ import androidx.core.os.bundleOf
 import com.rizzi.bouquet.PdfSource
 import com.rizzi.bouquet.VerticalPdfReader
 import com.rizzi.bouquet.rememberVerticalPdfReaderState
+import edu.equipo2.xiaomios.Actividad
 import edu.equipo2.xiaomios.GlobalVariables
 import edu.equipo2.xiaomios.MENUS
+import edu.equipo2.xiaomios.MenuHandler
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
@@ -110,14 +113,14 @@ fun BarraSuperior(){
         modifier = Modifier
             .fillMaxWidth()
             .background(SecondaryBackgroundColor)
-            .padding(top= 32.dp)
+            .statusBarsPadding()
         ,
         verticalAlignment = Alignment.CenterVertically
     ){
+        // Botón de Regreso
         Button(
             onClick = {
-                GlobalVariables.actividadCargada = null
-                GlobalVariables.menuActual = MENUS.PORTAFOLIO
+                MenuHandler.cambiarMenu(MenuHandler.menuAnterior);
                       },
             shape = RectangleShape,
             colors = ButtonDefaults.buttonColors(
@@ -132,8 +135,9 @@ fun BarraSuperior(){
             )
         }
 
+        // Título Superior del Visualizador de Actividad
         Text(
-            text = "Actividad Fundamental " + GlobalVariables.actividadCargada?.Numero.toString(),
+            text = "Actividad Fundamental " + (GlobalVariables.actividadCargada?.Numero ?: 0),
             color = AccentColor,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold

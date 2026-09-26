@@ -36,27 +36,21 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.equipo2.xiaomios.Actividad
+import edu.equipo2.xiaomios.Actividades
 import edu.equipo2.xiaomios.GlobalVariables
 import edu.equipo2.xiaomios.MENUS
 import edu.equipo2.xiaomios.MainActivity
+import edu.equipo2.xiaomios.MenuHandler
 import edu.equipo2.xiaomios.R
+import edu.equipo2.xiaomios.cargarImagen
 
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.BackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
 
-data class Actividad(
-    val Numero: Int,
-    val Nombre: String,
-    val Imagen: Int,
-    val NombreArchivo:String
-)
 
-val Actividades = listOf<Actividad>(
-    Actividad(1, "Arquitectura, Desempeño y tipos de un Sistema Operativo", R.drawable.ic_act1, "af_1.pdf"),
-    Actividad(2, "Multitarea y Control de Concurrencia", R.drawable.ic_act2, "af_2.pdf")
-)
 
 @Preview (
     showBackground = true,
@@ -108,11 +102,10 @@ fun MenuPortafolio(){
 }
 
 @Composable
-fun BotonActividad(Actividad: Actividad){
+fun BotonActividad(act: Actividad){
     Button(
         onClick = {
-                    GlobalVariables.actividadCargada = Actividad
-                    GlobalVariables.menuActual = MENUS.ACTIVIDAD
+                    MenuHandler.visualizarActividad(act)
                   },
         modifier = Modifier
             .background(Color.Transparent),
@@ -130,7 +123,7 @@ fun BotonActividad(Actividad: Actividad){
                 .background(SecondaryBackgroundColor)
         ) {
             Image(
-                painter = painterResource(id = Actividad.Imagen),
+                painter = cargarImagen(act.Imagen),
                 contentDescription = "Imagen de Actividad",
                 modifier = Modifier
                     .fillMaxHeight()
@@ -161,14 +154,14 @@ fun BotonActividad(Actividad: Actividad){
                     verticalArrangement = Arrangement.Center
                 ){
                     Text(
-                        text = "Actividad ${Actividad.Numero.toString()}",
+                        text = "Actividad ${act.Numero.toString()}",
                         fontSize = 16.sp,
                         color = SecondaryTextColor,
                         fontWeight = FontWeight.SemiBold
                     )
 
                     Text(
-                        text = Actividad.Nombre,
+                        text = act.Nombre,
                         fontSize = 18.sp,
                         color = AccentColor,
                         fontWeight = FontWeight.Bold

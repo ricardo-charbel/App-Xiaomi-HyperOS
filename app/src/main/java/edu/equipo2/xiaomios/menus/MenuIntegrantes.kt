@@ -28,37 +28,16 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.equipo2.xiaomios.Integrante
+import edu.equipo2.xiaomios.Integrantes
 import edu.equipo2.xiaomios.R
+import edu.equipo2.xiaomios.cargarImagen
 
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.BackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
 
-data class Integrante(
-    val Nombre: String,
-    val ApPaterno: String,
-    val ApMaterno: String,
-    val Matricula: String,
-    val Carrera:String,
-    var Imagen: Int,
-    val Lider: Boolean = false
-    )
-
-val Integrantes = listOf<Integrante>(
-    Integrante("Gerardo Alberto", "Bautista", "Hernández", "2062418", "ITS", R.drawable.int_gerardo),
-    Integrante("Karla Sarahí", "Chávez", "Tamez", "2169086", "IAS", R.drawable.int_karla),
-    Integrante("Oscar Ernesto", "Bustos", "Mercado", "2117393", "IAS", R.drawable.int_oscar),
-    Integrante("Diego Armando", "Esparza", "Flores", "1908457", "ITS", R.drawable.int_diego),
-    Integrante("Marco Giovanni", "García", "Alvares", "2153913", "IAS", R.drawable.int_marco),
-    Integrante("Victor Alain", "Hernández", "Jaraleño", "1945128", "ITS", R.drawable.int_victor),
-    Integrante("Ricardo Charbel", "Ibarra", "Miranda", "2117545", "IAS", R.drawable.int_ricardo),
-    Integrante("Francisco", "Mora", "Ruiz", "2226912", "ITS", R.drawable.int_francisco),
-    Integrante("Angélica", "Reyna", "García", "2144918", "ITS", R.drawable.int_angela),
-    Integrante("Maximiliano", "Romero", "García", "2226867", "ITS", R.drawable.int_maximiliano),
-    Integrante("Alberto", "Treviño", "Menchaca", "2154205", "IAS", R.drawable.int_alberto, true),
-    Integrante("Camila", "Trujillo", "Quintanilla", "2162775", "ITS", R.drawable.int_camila)
-)
 
 @Preview (
     showBackground = true,
@@ -120,7 +99,7 @@ fun EtiquetaIntegrante(Integrante: Integrante){
     ){
         // IMAGEN DEL INTEGRANTE
         Image(
-            painter = painterResource(id = Integrante.Imagen),
+            painter = cargarImagen(Integrante.Imagen),
             contentDescription = "Imagen de Integrante",
             modifier = Modifier
                 .padding(8.dp)
