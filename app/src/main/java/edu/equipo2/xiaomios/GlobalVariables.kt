@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.graphics.BitmapCompat
 
 // Las Actividades son tratadas como objetos para un mejor despliegue en la aplicación
 data class Actividad(
@@ -52,10 +51,11 @@ val Integrantes = listOf<Integrante>(
     Integrante("Camila", "Trujillo", "Quintanilla", "2162775", "ITS", "integrantes/int_camila.png")
 )
 
-
+// Carga imagenes respectivo a su ubicación dentro de la carpeta de Imagenes
+// Está funciona se utiliza con la finalidad de que se puedan cargar imagenes de diferentes carpetas y no tenerlas todas en una sola
 @Composable
 fun cargarImagen(ubicacion:String): Painter {
-    val ctx = LocalContext.current;
+    val ctx = LocalContext.current
     val preUbicacion = "imagenes/$ubicacion"
 
     return remember(preUbicacion){
@@ -69,4 +69,6 @@ fun cargarImagen(ubicacion:String): Painter {
 
 object GlobalVariables {
     var actividadCargada: Actividad? by mutableStateOf(null)
+
+
 }
