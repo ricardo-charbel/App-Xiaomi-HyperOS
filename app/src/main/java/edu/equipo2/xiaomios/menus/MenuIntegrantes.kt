@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.equipo2.xiaomios.Integrante
-import edu.equipo2.xiaomios.Integrantes
 import edu.equipo2.xiaomios.cargarImagen
+import edu.equipo2.xiaomios.data.Integrantes
+import edu.equipo2.xiaomios.data.Integrante
 
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.BackgroundColor
@@ -58,7 +59,8 @@ fun MenuIntegrantes(){
                 color = AccentColor,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top=32.dp, bottom=8.dp)
+                modifier = Modifier.padding(bottom=8.dp)
+                    .statusBarsPadding()
             )
 
             Text(

@@ -1,4 +1,4 @@
-package edu.equipo2.xiaomios.navbar
+package edu.equipo2.xiaomios.components
 
 import androidx.compose.material3.Icon
 import androidx.compose.foundation.background
@@ -25,8 +25,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.equipo2.xiaomios.MENUS
-import edu.equipo2.xiaomios.MenuHandler
+import edu.equipo2.xiaomios.handlers.MENUS
+import edu.equipo2.xiaomios.handlers.MenuHandler
 import edu.equipo2.xiaomios.R
 
 import edu.equipo2.xiaomios.ui.theme.AccentColor

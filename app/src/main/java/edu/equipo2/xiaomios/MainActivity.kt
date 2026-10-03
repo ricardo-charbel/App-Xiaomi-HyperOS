@@ -23,13 +23,20 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.equipo2.xiaomios.handlers.MenuHandler.cambiarMenuAnterior
 import edu.equipo2.xiaomios.menus.MenuActividad
 import edu.equipo2.xiaomios.ui.theme.XiaomiOSTheme
 
 import edu.equipo2.xiaomios.menus.MenuIntegrantes
 import edu.equipo2.xiaomios.menus.MenuInvestigacion
 import edu.equipo2.xiaomios.menus.MenuPortafolio
-import edu.equipo2.xiaomios.navbar.BarraNavegacion
+import edu.equipo2.xiaomios.components.BarraNavegacion
+import edu.equipo2.xiaomios.handlers.ListaTemas
+import edu.equipo2.xiaomios.handlers.MENUS
+import edu.equipo2.xiaomios.handlers.MenuHandler
+import edu.equipo2.xiaomios.handlers.MenuHandler.barraNavegacion
+import edu.equipo2.xiaomios.handlers.TopicHandler.idTemaActual
+import edu.equipo2.xiaomios.menus.MenuVisualizadorTema
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.BackgroundColor
 
@@ -58,7 +65,7 @@ fun MainContainer() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             // La barra de navegación no se mostrará mientras haya una actividad abierta (Probablemente debería globalizar esto)
-            if (GlobalVariables.actividadCargada == null){
+            if (barraNavegacion){
                 BarraNavegacion()
             }
         }
@@ -78,13 +85,14 @@ fun MainContainer() {
                 MENUS.PORTAFOLIO -> MenuPortafolio()
                 MENUS.ACTIVIDAD -> MenuActividad(GlobalVariables.actividadCargada)
                 MENUS.INVESTIGACION -> MenuInvestigacion()
+                MENUS.VISUALIZADOR_TEMA -> MenuVisualizadorTema()
                 else -> MenuError()
             }
         }
     }
 
     BackHandler(enabled = MenuHandler.submenu) {
-        MenuHandler.cambiarMenu(MenuHandler.menuAnterior)
+        cambiarMenuAnterior()
     }
 }
 
@@ -107,7 +115,7 @@ fun MenuError(){
         )
 
         Text(
-            text = "No debería de salir en ningun momento y bajo ninguna acción",
+            text = "No debería de salir en ningún momento y bajo ninguna acción",
             color = BackgroundColor,
             fontSize = 24.sp,
             textAlign = TextAlign.Center

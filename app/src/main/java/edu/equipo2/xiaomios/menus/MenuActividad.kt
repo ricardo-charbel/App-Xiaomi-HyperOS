@@ -30,9 +30,9 @@ import edu.equipo2.xiaomios.R
 import com.rizzi.bouquet.PdfSource
 import com.rizzi.bouquet.VerticalPdfReader
 import com.rizzi.bouquet.rememberVerticalPdfReaderState
-import edu.equipo2.xiaomios.Actividad
 import edu.equipo2.xiaomios.GlobalVariables
-import edu.equipo2.xiaomios.MenuHandler
+import edu.equipo2.xiaomios.data.Actividad
+import edu.equipo2.xiaomios.handlers.MenuHandler
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
@@ -91,7 +91,7 @@ fun MenuActividad(actividad: Actividad? = null){
 
 
 @Composable
-fun BarraSuperior(){
+private fun BarraSuperior(){
     Row(
         modifier = Modifier
             .fillMaxWidth()

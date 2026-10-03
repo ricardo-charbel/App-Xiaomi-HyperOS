@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,9 +29,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.equipo2.xiaomios.Actividad
-import edu.equipo2.xiaomios.Actividades
-import edu.equipo2.xiaomios.MenuHandler
+import edu.equipo2.xiaomios.data.Actividad
+import edu.equipo2.xiaomios.data.Actividades
+import edu.equipo2.xiaomios.handlers.MenuHandler
 import edu.equipo2.xiaomios.cargarImagen
 
 import edu.equipo2.xiaomios.ui.theme.AccentColor
@@ -60,7 +61,8 @@ fun MenuPortafolio(){
                 color = AccentColor,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top=32.dp, bottom=8.dp)
+                modifier = Modifier.padding(bottom=8.dp)
+                    .statusBarsPadding()
             )
 
             Text(
@@ -90,7 +92,7 @@ fun MenuPortafolio(){
 }
 
 @Composable
-fun BotonActividad(act: Actividad){
+private fun BotonActividad(act: Actividad){
     Button(
         onClick = {
                     MenuHandler.visualizarActividad(act)
