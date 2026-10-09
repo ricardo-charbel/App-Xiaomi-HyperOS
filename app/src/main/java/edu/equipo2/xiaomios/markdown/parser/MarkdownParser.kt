@@ -14,12 +14,14 @@ private fun parseHeading(line: String): MarkdownBlock.Heading?{
     )
 }
 
-private fun parseImage(line: String): MarkdownBlock.Image?{
-    val match = Regex("^!\\[(.*)]\\((.*)\\)$").find(line.trim()) ?: return null
+private fun parseImage(line: String): MarkdownBlock.Image? {
+    val match = Regex("""^!\[(.*?)]\((.*?)\)(?:\{(\d+)\})?$""").find(line.trim())
+        ?: return null
 
     return MarkdownBlock.Image(
         alt = match.groupValues[1],
-        path = match.groupValues[2]
+        path = match.groupValues[2],
+        size = match.groupValues[3].toIntOrNull() ?: 100
     )
 }
 
@@ -116,6 +118,62 @@ private fun isOrderedList(line: String): Boolean{
     )
 }
 
+private fun isTableStart(lines: List<String>, index: Int): Boolean{
+    if (index + 1 >= lines.size) return false
+
+    val header = lines[index]
+    val separator = lines[index + 1]
+
+    return header.contains("|") && isTableSeparator(separator)
+}
+
+private fun isTableSeparator(line: String): Boolean{
+    val cells = line
+        .trim()
+        .trim('|')
+        .split("|")
+    return cells.isNotEmpty() &&
+            cells.all{ cell ->
+                cell.trim().matches(Regex(":?-{3,}:?"))
+            }
+}
+
+
+
+private fun parseTableRow(line: String): List<String> {
+    return line
+        .trim()
+        .removePrefix("|")
+        .removeSuffix("|")
+        .split("|")
+        .map { it.trim() }
+}
+
+private fun parseTable(
+    lines: List<String>,
+    startIndex: Int
+): Pair<MarkdownBlock.Table, Int>?{
+    if (startIndex + 1 >= lines.size) return null
+
+    val headers = parseTableRow(lines[startIndex])
+    if (!isTableSeparator(lines[startIndex + 1])) return null
+
+    val rows = mutableListOf<List<String>>()
+    var index = startIndex + 2
+
+    while(index < lines.size){
+        val line = lines[index]
+        if (!line.contains("|") || line.isBlank()) break
+        rows.add(parseTableRow(line))
+        index++
+    }
+
+    return MarkdownBlock.Table(
+        headers,
+        rows
+    ) to index
+}
+
 class MarkdownParser {
     fun readMarkdown(context: Context, path:String): String{
         return context.assets
@@ -181,6 +239,18 @@ class MarkdownParser {
                         parseInline(text)
                     )
                 )
+                continue
+            }
+
+            // Tablas
+            if (isTableStart(lines, index)){
+                val res = parseTable(lines, index)
+
+                if (res != null){
+                    blocks.add(res.first)
+                    index = res.second
+                    continue
+                }
             }
 
             // Lista Sin Orden
@@ -216,6 +286,7 @@ class MarkdownParser {
                 continue
             }
 
+
             // Parrafo
             val paragraphLines = mutableListOf<String>()
             while(index < lines.size && lines[index].isNotBlank() && !isBlockStart(lines[index])){
@@ -227,6 +298,8 @@ class MarkdownParser {
             blocks.add(
                 MarkdownBlock.Paragraph(parseInline(paragraph))
             )
+
+
         }
 
         return blocks

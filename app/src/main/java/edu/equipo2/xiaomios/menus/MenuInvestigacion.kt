@@ -2,7 +2,6 @@ package edu.equipo2.xiaomios.menus
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,19 +21,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import edu.equipo2.xiaomios.markdown.parser.MarkdownParser
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -42,20 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.equipo2.xiaomios.R
-import edu.equipo2.xiaomios.cargarImagen
-import edu.equipo2.xiaomios.data.Actividad
-import edu.equipo2.xiaomios.data.Actividades
 import edu.equipo2.xiaomios.handlers.ListaTemas
-import edu.equipo2.xiaomios.handlers.MenuHandler
 import edu.equipo2.xiaomios.handlers.Tema
 import edu.equipo2.xiaomios.handlers.TopicHandler
-import edu.equipo2.xiaomios.markdown.ui.MarkdownRenderer
+import edu.equipo2.xiaomios.handlers.TopicHandler.obtenerDetalleTema
 import edu.equipo2.xiaomios.ui.theme.AccentColor
 import edu.equipo2.xiaomios.ui.theme.BackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
-import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
-
-
 @Preview (
     showBackground = true,
     device = Devices.PHONE,
@@ -126,10 +113,14 @@ fun MenuInvestigacion(){
                     color = AccentColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top=8.dp)
+                    modifier = Modifier.padding(top=8.dp, bottom = 8.dp)
                 )
-                ListaTemas.forEach{ tm ->
-                    BotonTema(tm)
+
+                for (i in arrayOf(1,2)){
+                    TituloFundamental(i)
+                    ListaTemas.filter{tm -> tm.Etapa == i}.forEach { tm ->
+                        BotonTema(tm)
+                    }
                 }
             }
         }
@@ -139,8 +130,11 @@ fun MenuInvestigacion(){
     }
 }
 
+
+
 @Composable
 private fun BotonTema(tm: Tema){
+    val dt = obtenerDetalleTema(tm)
     Button(
         onClick = {
             TopicHandler.visualizarTema(ListaTemas.indexOf(tm))
@@ -160,14 +154,16 @@ private fun BotonTema(tm: Tema){
                 .heightIn(64.dp, 64.dp)
                 .background(SecondaryBackgroundColor)
         ) {
-            Image(
-                painter = cargarImagen(tm.Imagen),
-                contentDescription = "Imagen de Tema",
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .align(Alignment.CenterEnd)
+            if (tm.Miniatura){
+                Image(
+                    painter = dt.Miniatura,
+                    contentDescription = dt.Nombre,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.CenterEnd)
 
-            )
+                )
+            }
 
             Box(
                 modifier = Modifier
@@ -192,13 +188,36 @@ private fun BotonTema(tm: Tema){
                 ){
 
                     Text(
-                        text = tm.Nombre,
-                        fontSize = 18.sp,
+                        text = dt.Nombre,
+                        fontSize = 16.sp,
                         color = AccentColor,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun TituloFundamental(num: Int){
+
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(AccentColor)
+            .padding(8.dp)
+
+    ){
+        Text(
+            text = "Actividad Fundamental ${num}",
+            style = TextStyle(
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            ),
+
+            )
     }
 }

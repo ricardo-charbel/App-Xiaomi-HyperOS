@@ -1,10 +1,5 @@
 package edu.equipo2.xiaomios.menus
 
-import android.adservices.topics.Topic
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,10 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +32,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -49,13 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.equipo2.xiaomios.handlers.MenuHandler.cambiarMenuAnterior
 import edu.equipo2.xiaomios.R
-import edu.equipo2.xiaomios.components.Botones
-import edu.equipo2.xiaomios.components.CrearBotonNavegacion
 import edu.equipo2.xiaomios.handlers.ListaTemas
-import edu.equipo2.xiaomios.handlers.Tema
-import edu.equipo2.xiaomios.handlers.TopicHandler
 import edu.equipo2.xiaomios.handlers.TopicHandler.idTemaActual
-import edu.equipo2.xiaomios.markdown.parser.MarkdownBlock
+import edu.equipo2.xiaomios.handlers.TopicHandler.obtenerDetalleTema
+import edu.equipo2.xiaomios.markdown.parser.MarkdownDocument
 import edu.equipo2.xiaomios.markdown.parser.MarkdownParser
 import edu.equipo2.xiaomios.markdown.ui.MarkdownRenderer
 import edu.equipo2.xiaomios.ui.theme.AccentColor
@@ -65,7 +53,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 var topicTitleSize = 16.sp
-var topicSubtitleSize = 12.sp
 
 @Preview (
     showBackground = true,
@@ -75,10 +62,11 @@ var topicSubtitleSize = 12.sp
 @Composable
 fun MenuVisualizadorTema(){
     if (idTemaActual == -1){
-        Text(text="Error al Cargar Tema ${idTemaActual}")
+        Text(text="Error al Cargar Tema $idTemaActual")
         return
     }
     val tema = ListaTemas[idTemaActual]
+    val dt = obtenerDetalleTema(tema)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {BarraSuperior(tema.Nombre)},
@@ -86,8 +74,6 @@ fun MenuVisualizadorTema(){
             if (ListaTemas.size > 1) NavegadorTemas()
         }
     ){ innerPadding ->
-        val bottomPadding = innerPadding.calculateBottomPadding()
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,22 +85,26 @@ fun MenuVisualizadorTema(){
             if (idTemaActual > -1){
                 val context = LocalContext.current
 
-                val blocks by produceState<List<MarkdownBlock>>(
-                    initialValue = emptyList(),
-                    key1 = tema.Archivo
+                val document by produceState(
+                    initialValue = MarkdownDocument(emptyList(), ""),
+                    key1 = idTemaActual,
+                    key2 = dt.Contenido,
+                    key3 = dt.Imagenes
                 ) {
                     value = withContext(Dispatchers.IO) {
                         val mdParser = MarkdownParser()
-                        val md = mdParser.readMarkdown(context, tema.Archivo)
+                        val md = mdParser.readMarkdown(context, dt.Contenido)
 
-                        withContext(Dispatchers.Default) {
+                        val blocks = withContext(Dispatchers.Default) {
                             mdParser.parse(md)
                         }
+
+                        MarkdownDocument(blocks, dt.Imagenes)
                     }
                 }
 
-                key(idTemaActual){
-                    MarkdownRenderer(blocks)
+                key(idTemaActual) {
+                    MarkdownRenderer(document)
                 }
 
             }
@@ -198,7 +188,7 @@ private fun RowScope.CrearBotonTema(temaId: Int){
         colors = ButtonDefaults.buttonColors(containerColor = AccentColor),
         contentPadding = PaddingValues(0.dp),
         onClick = {
-            TopicHandler.idTemaActual = temaId
+            idTemaActual = temaId
         }
     ){
         if (temaId > idTemaActual){
@@ -211,7 +201,6 @@ private fun RowScope.CrearBotonTema(temaId: Int){
 
 @Composable
 private fun BotonTemaSiguiente(temaId:Int){
-    val tema = ListaTemas[temaId]
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -226,16 +215,7 @@ private fun BotonTemaSiguiente(temaId:Int){
             horizontalAlignment = Alignment.End
         ){
             Text(
-                text = "Siguiente Tema",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = topicSubtitleSize,
-                    textAlign = TextAlign.End
-                )
-            )
-
-            Text(
-                text = "${temaId}",
+                text = ListaTemas[temaId].Nombre,
                 style = TextStyle(
                     color = Color.White,
                     fontSize = topicTitleSize,
@@ -259,8 +239,6 @@ private fun BotonTemaSiguiente(temaId:Int){
 
 @Composable
 private fun BotonTemaAnterior(temaId:Int){
-    val tema = ListaTemas[temaId]
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Start,
@@ -281,16 +259,9 @@ private fun BotonTemaAnterior(temaId:Int){
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ){
-            Text(
-                text = "Anterior Tema",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = topicSubtitleSize
-                )
-            )
 
             Text(
-                text = "${temaId}",
+                text = ListaTemas[temaId].Nombre,
                 style = TextStyle(
                     color = Color.White,
                     fontSize = topicTitleSize,

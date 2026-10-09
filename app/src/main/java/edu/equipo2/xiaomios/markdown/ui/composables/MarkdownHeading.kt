@@ -1,12 +1,14 @@
 package edu.equipo2.xiaomios.markdown.ui.composables
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import edu.equipo2.xiaomios.markdown.parser.MarkdownBlock
 import edu.equipo2.xiaomios.markdown.ui.BuildMarkdownString
 import edu.equipo2.xiaomios.ui.theme.AccentColor
@@ -48,7 +50,7 @@ fun MarkdownHeading(block: MarkdownBlock.Heading){
             defStyle = TextStyle(
                 color = AccentColor,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
+                //textAlign = TextAlign.Center,
                 fontSize = SubtopicHeaderSize
             )
         }
@@ -59,6 +61,6 @@ fun MarkdownHeading(block: MarkdownBlock.Heading){
     Text(
         text = annotatedString,
         style = defStyle,
-        modifier = Modifier.fillMaxWidth()
+        modifier = (if (level == 1) Modifier.fillMaxWidth().padding(bottom = 16.dp) else Modifier.fillMaxWidth())
     )
 }

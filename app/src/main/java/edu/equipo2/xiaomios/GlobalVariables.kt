@@ -15,9 +15,9 @@ import edu.equipo2.xiaomios.data.Actividad
 // Carga imagenes respectivo a su ubicación dentro de la carpeta de Imagenes
 // Está funciona se utiliza con la finalidad de que se puedan cargar imagenes de diferentes carpetas y no tenerlas todas en una sola
 @Composable
-fun cargarImagen(ubicacion:String): Painter {
+fun cargarImagen(ubicacion:String, global: Boolean = false): Painter {
     val ctx = LocalContext.current
-    val preUbicacion = "imagenes/$ubicacion"
+    val preUbicacion = if (global) ubicacion else "imagenes/$ubicacion"
 
     return remember(preUbicacion){
         ctx.assets.open(preUbicacion).use{ iS ->

@@ -49,9 +49,10 @@ fun MenuActividad(actividad: Actividad? = null){
 
     ) { innerPadding ->
         if (actividad != null){
+            // state carga la información del PDF por cargar
             val state = rememberVerticalPdfReaderState(source = PdfSource.Asset(
                 actividad.NombreArchivo))
-            VerticalPdfReader(
+            VerticalPdfReader( // Lector de archivo PDF que se despliega en la aplicación
                 state = state,
                 modifier = Modifier
                     .padding(innerPadding)
