@@ -1,18 +1,16 @@
 package edu.equipo2.xiaomios.handlers
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import edu.equipo2.xiaomios.data.Actividad
-import edu.equipo2.xiaomios.handlers.TopicHandler
 import edu.equipo2.xiaomios.GlobalVariables.actividadCargada
 import edu.equipo2.xiaomios.handlers.TopicHandler.idTemaActual
 
 // Los diferentes tipos de Menus se encuentran enumerados en el siguiente ENUM
 enum class MENUS{
     NINGUNO,            // No representa a ningún menú, utilizado como valor NULO
-    INTEGRANTES,        // Muestra a los integrantes del equipo y sus datos personales.
+    PORTADA,        // Muestra a la portada del PIA
     PORTAFOLIO,         // Muestra el portafolio de actividades fundamentales.
     ACTIVIDAD,          // SUBMENU. Muestra el PDF de la actividadCargada
     // IMPORTANTE: Este menu solo se muestra cuando actividadCargada no tenga valores nulos
@@ -27,9 +25,11 @@ data class DetalleMenu(
     val barraNavegacion: Boolean = true // Dependiendo de su valor, mostrará o no el menu de navegación global
 )
 
+// DetalleMenu se encarga de listar unos cuantos detalles extra sobre los menus que se están accediendo
+// Los detalles se pueden ver a partir de la línea 24
 val ListaMenus = listOf<DetalleMenu>(
     DetalleMenu(MENUS.NINGUNO, submenu = false, barraNavegacion = true),
-    DetalleMenu(MENUS.INTEGRANTES, submenu = false, barraNavegacion = true),
+    DetalleMenu(MENUS.PORTADA, submenu = false, barraNavegacion = true),
     DetalleMenu(MENUS.PORTAFOLIO, submenu = false, barraNavegacion = true),
     DetalleMenu(MENUS.ACTIVIDAD, submenu = true, barraNavegacion = false),
     DetalleMenu(MENUS.INVESTIGACION, submenu = false, barraNavegacion = true),
@@ -38,7 +38,7 @@ val ListaMenus = listOf<DetalleMenu>(
 
 object MenuHandler{
     // En que Menu está el usuario
-    var menuActual by mutableStateOf(MENUS.INTEGRANTES)
+    var menuActual by mutableStateOf(MENUS.PORTADA)
     // En que Menu ESTUVO el usuario
     var menuAnterior by mutableStateOf(MENUS.NINGUNO)
     // Si esta variable está activa, al darle al botón de regresar, se regresará al menu anterior
@@ -51,22 +51,24 @@ object MenuHandler{
         cambiarMenu(menuAnterior)
     }
 
+    // Cambia al usuario de menu
     fun cambiarMenu(menu: MENUS){
-        if (menuActual == menu) return
-        if (menuActual == menuAnterior) return
-        if (menuActual == MENUS.ACTIVIDAD) actividadCargada = null
-        if (menuActual == MENUS.VISUALIZADOR_TEMA) idTemaActual = -1
+        if (menuActual == menu) return                              // Evitamos cambiar de un menu a si mismo
+        if (menuActual == menuAnterior) return                      // Evitamos cambiar de un menu a si mismo si es que se clasifica como menuAnterior
+        if (menuActual == MENUS.ACTIVIDAD) actividadCargada = null  // Evitamos cambiar al menu de actividad si no hay actividad por cargar
+        if (menuActual == MENUS.VISUALIZADOR_TEMA) idTemaActual = -1// Evitamos cambiar al menu de temas si es que no hay tema por cargar
 
-        val dtMenu = ListaMenus[menu.ordinal]
+        val dtMenu = ListaMenus[menu.ordinal]   // En base a la ID del menu se obtiene su DetalleMenu
 
-        menuAnterior = menuActual
-        menuActual = menu
+        menuAnterior = menuActual   // El menu actual se almacena como el menu anterior
+        menuActual = menu           // El menu nuevo se almacena como el menu actual
 
-        submenu = dtMenu.submenu
-        barraNavegacion = dtMenu.barraNavegacion
+        submenu = dtMenu.submenu    // Dependiendo del DetalleMenu si este Menu es un Submenu
+        barraNavegacion = dtMenu.barraNavegacion    // Dependiendo del DetalleMenu si la barra de navegación se tiene que mostrar o no
 
     }
 
+    // Carga una actividad dada por el argumento "Actividad" para mostrar en el menu de actividad
     fun visualizarActividad(act: Actividad){
         actividadCargada = act
         cambiarMenu(MENUS.ACTIVIDAD)

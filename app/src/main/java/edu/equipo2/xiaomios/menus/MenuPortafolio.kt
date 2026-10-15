@@ -66,7 +66,7 @@ fun MenuPortafolio(){
             )
 
             Text(
-                text = "Presione en la actividad que desee visualizar",
+                text = "Seleccione la actividad que desee visualizar",
                 color = SecondaryTextColor,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom=8.dp)
@@ -109,12 +109,12 @@ private fun BotonActividad(act: Actividad){
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .heightIn(96.dp, 96.dp)
+                .heightIn(96.dp, 128.dp)
                 .background(SecondaryBackgroundColor)
         ) {
             Image(
                 painter = cargarImagen(act.Imagen),
-                contentDescription = "Imagen de Actividad",
+                contentDescription = act.Nombre,
                 modifier = Modifier
                     .fillMaxHeight()
                     .align(Alignment.CenterEnd)
@@ -126,12 +126,11 @@ private fun BotonActividad(act: Actividad){
                     .fillMaxSize(1f)
                     .background(
                         brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                SecondaryBackgroundColor,
-                                SecondaryBackgroundColor,
-                                SecondaryBackgroundColor,
-                                SecondaryBackgroundColor,
-                                Color.Transparent
+                            colorStops = arrayOf(
+                                0.0f to SecondaryBackgroundColor,
+                                0.64f to SecondaryBackgroundColor,
+                                0.83f to SecondaryBackgroundColor.copy(alpha = 0.65f),
+                                1.0f to Color.Transparent
                             )
                         )
                     )

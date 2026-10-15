@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import edu.equipo2.xiaomios.cargarImagen
 import edu.equipo2.xiaomios.handlers.MenuHandler.cambiarMenu
 
+// Los temas son guardados como información de clases de la aplicación
 data class Tema(
     var Nombre: String = "Sin Nombre",
     var Etapa: Int = 1,             // Etapa representa el numero de la fundamental que categoriza a este tema
@@ -15,6 +16,7 @@ data class Tema(
     var Miniatura: Boolean = false  // Activa la miniatura para visualizar en el menu principal de Investigación
 )
 
+// Lista de temas de la investigación
 val ListaTemas = listOf<Tema>(
     // Actividad Fundamental 1
     Tema("Introducción a la Arquitectura del Sistema Operativo", 1,1, true),
@@ -30,6 +32,8 @@ val ListaTemas = listOf<Tema>(
     Tema("Interacciones entre Procesos", 2, 10, true)
 )
 
+// Hay detalles importantes que solo se obtienen al cargar los archivos correspondientes del tema,
+// de ahí la existencia del DetalleTema, cuenta con la información ya cargada para su uso posterior
 data class DetalleTema(
     var Nombre: String,
     var Miniatura: Painter,
@@ -38,20 +42,26 @@ data class DetalleTema(
 )
 
 object TopicHandler {
-    var idTemaActual: Int by mutableIntStateOf(0)
+    var idTemaActual: Int by mutableIntStateOf(0) // ID del tema cargado actualmente
 
+    // Se encarga de cargar el menu de visualizador de temas con la ID de tema asignado con el argumento temaId
     fun visualizarTema(temaId: Int){
-        if (temaId == -1 || temaId > ListaTemas.size - 1) return
+        if (temaId == -1 || temaId > ListaTemas.size - 1) return // Evitamos cargar IDs de temas inexistentes o cargar el tema que ya esta cargado
         idTemaActual = temaId
         cambiarMenu(MENUS.VISUALIZADOR_TEMA)
     }
 
+    // Creación de detalle tema
     @Composable
     fun obtenerDetalleTema(tm: Tema): DetalleTema{
+        // Ubicación de la imagen de miniatura
         val mini = cargarImagen("investigacion/af_${tm.Etapa}/${tm.Seccion}/miniatura.png", true)
+        // Ubicación del archivo MD con el contenido del tema
         val contenido = "investigacion/af_${tm.Etapa}/${tm.Seccion}/contenido.md"
+        // Ubicación de la carpeta de imagenes del tema
         val imgs = "investigacion/af_${tm.Etapa}/${tm.Seccion}/imagenes"
 
+        // Una vez cargados, se retornan a donde sea que la función haya sido llamada como objeto DetalleTema
         return DetalleTema(
             Nombre = tm.Nombre,
             Miniatura = mini,

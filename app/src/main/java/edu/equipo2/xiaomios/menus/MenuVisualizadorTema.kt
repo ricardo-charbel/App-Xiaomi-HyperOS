@@ -1,5 +1,7 @@
 package edu.equipo2.xiaomios.menus
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,13 +24,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -52,66 +58,122 @@ import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-var topicTitleSize = 16.sp
+var topicTitleSize = 18.sp
 
 @Preview (
     showBackground = true,
     device = Devices.PHONE,
     showSystemUi = true
 )
+
+
 @Composable
-fun MenuVisualizadorTema(){
-    if (idTemaActual == -1){
-        Text(text="Error al Cargar Tema $idTemaActual")
+fun MenuVisualizadorTema() {
+    if (idTemaActual !in ListaTemas.indices) {
+        Text(text = "Error al Cargar Tema $idTemaActual")
         return
     }
-    val tema = ListaTemas[idTemaActual]
-    val dt = obtenerDetalleTema(tema)
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {BarraSuperior(tema.Nombre)},
-        bottomBar = {
-            if (ListaTemas.size > 1) NavegadorTemas()
+
+    val context = LocalContext.current
+
+    // Tema que realmente está mostrándose.
+    var temaMostrado by remember {
+        mutableStateOf(idTemaActual)
+    }
+
+    var document by remember {
+        mutableStateOf<MarkdownDocument?>(null)
+    }
+
+    // Controla la opacidad de TODA la pantalla.
+    val opacidad = remember {
+        Animatable(0f)
+    }
+
+    // Detalles del tema a cargar
+    val nuevoId = idTemaActual
+    val nuevoTema = ListaTemas[nuevoId]
+    val nuevoDetalle = obtenerDetalleTema(nuevoTema)
+
+    LaunchedEffect(idTemaActual) {
+        // Ocultar la interfaz actual
+        opacidad.animateTo(
+            targetValue = 0f,
+            animationSpec = tween(180)
+        )
+
+        // Leer y procesar markdown
+        val nuevoDocumento = withContext(Dispatchers.IO) {
+            val parser = MarkdownParser()
+
+            val markdown = parser.readMarkdown(
+                context,
+                nuevoDetalle.Contenido
+            )
+
+            val bloques = withContext(Dispatchers.Default) {
+                parser.parse(markdown)
+            }
+
+            MarkdownDocument(
+                bloques,
+                nuevoDetalle.Imagenes
+            )
         }
-    ){ innerPadding ->
-        Box(
+
+        // Actualizar el contenido mientras está oculto.
+        temaMostrado = nuevoId
+        document = nuevoDocumento
+
+        // Mostrar la pantalla nueva.
+        opacidad.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(500)
+        )
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundColor)
+    ) {
+        Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = BackgroundColor)
-                .padding(
-                    innerPadding
+                .graphicsLayer {
+                    alpha = opacidad.value
+                },
+            topBar = {
+                BarraSuperior(
+                    ListaTemas[temaMostrado].Nombre
                 )
-        ){
-            if (idTemaActual > -1){
-                val context = LocalContext.current
-
-                val document by produceState(
-                    initialValue = MarkdownDocument(emptyList(), ""),
-                    key1 = idTemaActual,
-                    key2 = dt.Contenido,
-                    key3 = dt.Imagenes
-                ) {
-                    value = withContext(Dispatchers.IO) {
-                        val mdParser = MarkdownParser()
-                        val md = mdParser.readMarkdown(context, dt.Contenido)
-
-                        val blocks = withContext(Dispatchers.Default) {
-                            mdParser.parse(md)
-                        }
-
-                        MarkdownDocument(blocks, dt.Imagenes)
+            },
+            bottomBar = {
+                if (ListaTemas.size > 1) {
+                    NavegadorTemas()
+                }
+            },
+            containerColor = BackgroundColor
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BackgroundColor)
+                    .padding(innerPadding)
+            ) {
+                document?.let { loadedDocument ->
+                    key(temaMostrado) {
+                        MarkdownRenderer(loadedDocument)
                     }
                 }
-
-                key(idTemaActual) {
-                    MarkdownRenderer(document)
-                }
-
             }
         }
     }
 }
 
+
+
+// Barra principal donde se muestra el nombre del tema y el botón de regreso al menu de temas de la investigación
 @Composable
 private fun BarraSuperior(nombre: String = "Sin Nombre"){
     Row(
@@ -140,7 +202,7 @@ private fun BarraSuperior(nombre: String = "Sin Nombre"){
             )
         }
 
-        // Título Superior del Visualizador de Actividad
+        // Título Superior del Visualizador de Tema
         Text(
             text = nombre,
             color = AccentColor,

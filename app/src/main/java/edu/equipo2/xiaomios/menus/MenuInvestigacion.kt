@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -63,16 +64,17 @@ fun MenuInvestigacion(){
                 .verticalScroll(scrollState)
 
         ){
-            Column(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(16.dp))
                     .background(SecondaryBackgroundColor)
                     .padding(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 Icon(
-                    modifier = Modifier.size(128.dp),
+                    modifier = Modifier.size(64.dp),
                     painter = painterResource(id = R.drawable.ic_xiaomi),
                     contentDescription = "Xiaomi Hyper OS",
                     tint = AccentColor
@@ -82,17 +84,7 @@ fun MenuInvestigacion(){
                     text = "Xiaomi Hyper OS",
                     style = TextStyle(
                         color = AccentColor,
-                        fontSize = 32.sp,
-                        textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-
-                Text(
-                    text = "Investigación del Sistema Operativo",
-                    style = TextStyle(
-                        color = AccentColor,
-                        fontSize = 16.sp,
+                        fontSize = 24.sp,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Bold
                     )
@@ -109,13 +101,15 @@ fun MenuInvestigacion(){
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ){
                 Text(
-                    text = "Presione en el tema que desee visualizar",
+                    text = "Seleccione el tema que desee visualizar",
                     color = AccentColor,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top=8.dp, bottom = 8.dp)
                 )
 
+                // Aquí es donde inicia el cargado de actividades por Etapas o Fundamentales (De la 1 a la 4)
+                // Gracias a este for se logran categorizar cada actividad por etapa
                 for (i in arrayOf(1,2)){
                     TituloFundamental(i)
                     ListaTemas.filter{tm -> tm.Etapa == i}.forEach { tm ->
@@ -201,8 +195,6 @@ private fun BotonTema(tm: Tema){
 
 @Composable
 fun TituloFundamental(num: Int){
-
-
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))

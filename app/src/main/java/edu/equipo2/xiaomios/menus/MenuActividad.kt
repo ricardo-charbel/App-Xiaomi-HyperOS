@@ -1,4 +1,5 @@
 package edu.equipo2.xiaomios.menus
+// Este menú se encarga de cargar el PDF de la actividad que se desee visualizar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,14 +42,14 @@ import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
     device = Devices.PHONE,
     showSystemUi = true
 )
-@Composable
+@Composable // Este menu requiere que sea llamado con la información de la actividad por cargar
 fun MenuActividad(actividad: Actividad? = null){
     Scaffold(
     modifier = Modifier.fillMaxSize(),
-    topBar = {BarraSuperior()}
+    topBar = {BarraSuperior()} // Cuenta con barra superior que le permite al usuario regresar al menu de actividades
 
     ) { innerPadding ->
-        if (actividad != null){
+        if (actividad != null){ // Si hay una actividad por cargar...
             // state carga la información del PDF por cargar
             val state = rememberVerticalPdfReaderState(source = PdfSource.Asset(
                 actividad.NombreArchivo))
@@ -58,7 +59,7 @@ fun MenuActividad(actividad: Actividad? = null){
                     .padding(innerPadding)
                     .fillMaxSize()
             )
-        } else {
+        } else { // De lo contrario, se muestra una pantalla de error...
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -90,7 +91,7 @@ fun MenuActividad(actividad: Actividad? = null){
     }
 }
 
-
+// Barra superior del visualizador de la actividad
 @Composable
 private fun BarraSuperior(){
     Row(
