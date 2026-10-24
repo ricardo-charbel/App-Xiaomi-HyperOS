@@ -18,11 +18,11 @@ fun MarkdownUnorderedList(block: MarkdownBlock.UnorderedList){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
     ){
         block.items.forEach{item ->
             Row(
                 modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 4.dp)
             ){
                 Text(
                     text = "•",
@@ -35,6 +35,7 @@ fun MarkdownUnorderedList(block: MarkdownBlock.UnorderedList){
                     text = BuildMarkdownString(item),
                     modifier = Modifier.weight(1f),
                     fontSize = NormalTextSize,
+                    lineHeight = NormalTextSize,
                     color = AccentColor
                 )
             }

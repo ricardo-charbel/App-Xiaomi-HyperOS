@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.sp
 import edu.equipo2.xiaomios.markdown.parser.MarkdownBlock
 import edu.equipo2.xiaomios.markdown.ui.BuildMarkdownString
 import edu.equipo2.xiaomios.ui.theme.AccentColor
+import edu.equipo2.xiaomios.ui.theme.NormalTextSize
 
 
 @Composable
@@ -21,7 +22,7 @@ fun MarkdownParagraph(block: MarkdownBlock.Paragraph){
         text = annotatedString,
         modifier = Modifier.padding(vertical = 6.dp),
         style = TextStyle(
-            fontSize = 12.sp,
+            fontSize = NormalTextSize,
             textIndent = TextIndent(firstLine = 24.sp, restLine = 0.sp),
             color = AccentColor,
             textAlign = TextAlign.Justify

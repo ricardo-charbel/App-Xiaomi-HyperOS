@@ -50,7 +50,7 @@ fun MarkdownHeading(block: MarkdownBlock.Heading){
             defStyle = TextStyle(
                 color = AccentColor,
                 fontWeight = FontWeight.Bold,
-                //textAlign = TextAlign.Center,
+                textAlign = TextAlign.Center,
                 fontSize = SubtopicHeaderSize
             )
         }

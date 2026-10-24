@@ -37,8 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.equipo2.xiaomios.R
-import edu.equipo2.xiaomios.handlers.ListaTemas
-import edu.equipo2.xiaomios.handlers.Tema
+import edu.equipo2.xiaomios.data.Tema
+import edu.equipo2.xiaomios.data.ListaTemas
 import edu.equipo2.xiaomios.handlers.TopicHandler
 import edu.equipo2.xiaomios.handlers.TopicHandler.obtenerDetalleTema
 import edu.equipo2.xiaomios.ui.theme.AccentColor
@@ -110,11 +110,16 @@ fun MenuInvestigacion(){
 
                 // Aquí es donde inicia el cargado de actividades por Etapas o Fundamentales (De la 1 a la 4)
                 // Gracias a este for se logran categorizar cada actividad por etapa
-                for (i in arrayOf(1,2)){
+                for (i in arrayOf(1,2,3,4)){
                     TituloFundamental(i)
                     ListaTemas.filter{tm -> tm.Etapa == i}.forEach { tm ->
                         BotonTema(tm)
                     }
+                }
+
+                TituloPersonalizado("Adicional")
+                ListaTemas.filter{tm -> tm.Etapa == 5}.forEach { tm ->
+                    BotonTema(tm)
                 }
             }
         }
@@ -204,6 +209,27 @@ fun TituloFundamental(num: Int){
     ){
         Text(
             text = "Actividad Fundamental ${num}",
+            style = TextStyle(
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            ),
+
+            )
+    }
+}
+
+@Composable
+fun TituloPersonalizado(titulo: String){
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(AccentColor)
+            .padding(8.dp)
+
+    ){
+        Text(
+            text = titulo,
             style = TextStyle(
                 color = Color.White,
                 fontSize = 20.sp,

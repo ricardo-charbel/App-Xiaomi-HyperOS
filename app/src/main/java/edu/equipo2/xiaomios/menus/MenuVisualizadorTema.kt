@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.equipo2.xiaomios.handlers.MenuHandler.cambiarMenuAnterior
 import edu.equipo2.xiaomios.R
-import edu.equipo2.xiaomios.handlers.ListaTemas
+import edu.equipo2.xiaomios.data.ListaTemas
 import edu.equipo2.xiaomios.handlers.TopicHandler.idTemaActual
 import edu.equipo2.xiaomios.handlers.TopicHandler.obtenerDetalleTema
 import edu.equipo2.xiaomios.markdown.parser.MarkdownDocument

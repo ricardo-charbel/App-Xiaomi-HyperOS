@@ -53,7 +53,7 @@ fun MarkdownRenderer(document: MarkdownDocument){
               is MarkdownBlock.Quote -> MarkdownQuote(block)
               is MarkdownBlock.Table -> MarkdownTable(block)
 
-              MarkdownBlock.Divider -> HorizontalDivider()
+              MarkdownBlock.Divider -> HorizontalDivider(modifier=Modifier.padding(vertical = 8.dp))
           }
       }
     }

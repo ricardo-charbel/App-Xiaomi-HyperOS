@@ -2,8 +2,13 @@ package edu.equipo2.xiaomios.markdown.parser
 
 import android.content.Context
 
-private fun parseHeading(line: String): MarkdownBlock.Heading?{
-    val match = Regex("^(#{1,6})\\s+(.*)$").find(line.trim()) ?: return null
+private fun parseHeading(line: String): MarkdownBlock.Heading? {
+    val normalized = line
+        .removePrefix("\uFEFF")
+        .trim()
+
+    val match = Regex("^(#{1,6})\\s+(.*)$")
+        .find(normalized) ?: return null
 
     val level = match.groupValues[1].length
     val text = match.groupValues[2]
@@ -140,13 +145,13 @@ private fun isTableSeparator(line: String): Boolean{
 
 
 
-private fun parseTableRow(line: String): List<String> {
+private fun parseTableRow(line: String): List<List<MarkdownInline>> {
     return line
         .trim()
         .removePrefix("|")
         .removeSuffix("|")
         .split("|")
-        .map { it.trim() }
+        .map { parseInline(it.trim()) }
 }
 
 private fun parseTable(
@@ -158,7 +163,7 @@ private fun parseTable(
     val headers = parseTableRow(lines[startIndex])
     if (!isTableSeparator(lines[startIndex + 1])) return null
 
-    val rows = mutableListOf<List<String>>()
+    val rows = mutableListOf<List<List<MarkdownInline>>>()
     var index = startIndex + 2
 
     while(index < lines.size){

@@ -30,8 +30,8 @@ interface MarkdownBlock {
     ) : MarkdownBlock
 
     data class Table(
-        val headings: List<String>,
-        val rows: List<List<String>>
+        val headings: List<List<MarkdownInline>>,
+        val rows: List<List<List<MarkdownInline>>>
     ) : MarkdownBlock
 
     data object Divider : MarkdownBlock

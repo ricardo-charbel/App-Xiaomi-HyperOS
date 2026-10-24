@@ -111,8 +111,8 @@ fun MainContainer() {
         }
     }
 
-    // Traduciendolo de la manera mas literal posible, el "administrador" de regreso
-    // se encarga de administrar lo relacionado a lo que sucede cuando el usuario decide ir hacia "atrás" en la app
+    // Traduciendolo de la manera más literal posible, el "administrador" de regreso
+    // se encarga de administrar lo relacionado sobre lo que sucede cuando el usuario decide ir hacia "atrás" en la app
     // Si estamos en un submenu, se regresa al menu principal del que vino el usuario o caso contrario, cierra la app
     // Depende del argumento "enabled" el que se ejecute cambiarMenuAnterior
     BackHandler(enabled = MenuHandler.submenu) {

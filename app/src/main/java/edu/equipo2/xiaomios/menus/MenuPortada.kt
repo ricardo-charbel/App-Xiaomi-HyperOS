@@ -84,27 +84,82 @@ fun MenuPortada(){
 
 @Composable
 fun DatosPrincipales(){
-
-    Text(
-        text = "Sistemas Operativos",
-        color = AccentColor,
-        fontSize = 32.sp,
-        textAlign = TextAlign.Center,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .statusBarsPadding()
-            .fillMaxWidth()
-    )
-
-    Text(
-        text = "Producto Integrador de Aprendizaje",
-        color = AccentColor,
-        fontSize = 20.sp,
-        textAlign = TextAlign.Center,
-        fontWeight = FontWeight.Bold,
+    Spacer(modifier=Modifier.statusBarsPadding())
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-    )
+            .clip(shape = RoundedCornerShape(16.dp))
+            .background(SecondaryBackgroundColor)
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ){
+        Image(
+            painter = painterResource(R.drawable.ic_uanl),
+            contentDescription = "UANL",
+            modifier = Modifier.size(48.dp)
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        ){
+            Text(
+                text = "Universidad Autónoma de Nuevo León",
+                style = TextStyle(
+                    color = AccentColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+            )
+            Text(
+                text = "Facultad de Ingeniería Mecánica y Eléctrica",
+                style = TextStyle(
+                    textAlign = TextAlign.Center,
+                    color = AccentColor,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            )
+        }
+
+        Image(
+            painter = painterResource(R.drawable.ic_fime),
+            contentDescription = "UANL",
+            modifier = Modifier.size(48.dp)
+        )
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(16.dp))
+            .background(SecondaryBackgroundColor)
+            .padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(
+            text = "Sistemas Operativos",
+            color = AccentColor,
+            fontSize = 32.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+
+        Text(
+            text = "Producto Integrador de Aprendizaje",
+            color = AccentColor,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+    }
+
+
 
     Spacer(modifier = Modifier.height(8.dp))
 
