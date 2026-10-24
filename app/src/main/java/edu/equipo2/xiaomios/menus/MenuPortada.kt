@@ -26,8 +26,6 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,8 +50,8 @@ import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import edu.equipo2.xiaomios.ui.theme.SecondaryTextColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.round
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 
 
 @Preview (
@@ -405,7 +403,7 @@ fun RowScope.DatosIntegrante(Integrante: Integrante){
     }*/
 
     LaunchedEffect(Unit) {
-        delay(100)
+        delay(100.milliseconds)
         launch {porcentaje.animateTo(Integrante.Participacion,
             tween(1500, easing = EaseOut))}
     }
