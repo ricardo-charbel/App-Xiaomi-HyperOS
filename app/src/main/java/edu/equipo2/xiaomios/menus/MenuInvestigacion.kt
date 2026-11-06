@@ -110,6 +110,11 @@ fun MenuInvestigacion(){
 
                 // Aquí es donde inicia el cargado de actividades por Etapas o Fundamentales (De la 1 a la 4)
                 // Gracias a este for se logran categorizar cada actividad por etapa
+
+                ListaTemas.filter{tm -> tm.Etapa == 6}.forEach{ tm ->
+                    BotonTema(tm)
+                }
+
                 for (i in arrayOf(1,2,3,4)){
                     TituloFundamental(i)
                     ListaTemas.filter{tm -> tm.Etapa == i}.forEach { tm ->

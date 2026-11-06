@@ -58,7 +58,7 @@ import edu.equipo2.xiaomios.ui.theme.SecondaryBackgroundColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-var topicTitleSize = 18.sp
+var topicTitleSize = 16.sp
 
 @Preview (
     showBackground = true,

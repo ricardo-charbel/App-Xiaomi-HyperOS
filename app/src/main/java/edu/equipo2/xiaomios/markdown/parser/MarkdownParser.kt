@@ -20,13 +20,13 @@ private fun parseHeading(line: String): MarkdownBlock.Heading? {
 }
 
 private fun parseImage(line: String): MarkdownBlock.Image? {
-    val match = Regex("""^!\[(.*?)]\((.*?)\)(?:\{(\d+)\})?$""").find(line.trim())
+    val match = Regex("""^!\[(.*?)]\((.*?)\)(?:\{(\d+(?:\.\d+)?)\})?$""").find(line.trim())
         ?: return null
 
     return MarkdownBlock.Image(
         alt = match.groupValues[1],
         path = match.groupValues[2],
-        size = match.groupValues[3].toIntOrNull() ?: 100
+        size = match.groupValues[3].toDoubleOrNull() ?: 1.0
     )
 }
 

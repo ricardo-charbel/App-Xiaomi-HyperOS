@@ -26,7 +26,7 @@ interface MarkdownBlock {
     data class Image(
         val alt: String,
         var path: String,
-        val size: Int = 100
+        val size: Double = 1.0
     ) : MarkdownBlock
 
     data class Table(
